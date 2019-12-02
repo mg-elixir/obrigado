@@ -10,31 +10,27 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 by adding `obrigado` to your list of dependencies in `mix.exs`:
 
 ```elixir
-
 def deps do
-
-[
-
-{:obrigado, "~> 0.1.0"}
-
-]
-
+  [ {:obrigado, "~> 0.2.1"}]
 end
-
 ```
 
-  ### Running
+### Get your Github token with public repo access
+
+https://github.com/settings/tokens/new
+
+### Export your GitHub token
+
+```sh
+export GITHUB_TOKEN=XXXXXXXXXXXXXXXXXX
+```
+
+### Run mix task
 
 Run `mix` task:
 
 ```elixir
-
 mix star
-
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-
-be found at [https://hexdocs.pm/obrigado](https://hexdocs.pm/obrigado).
+![image.png](https://api.monosnap.com/file/download?id=nUcwN8Y5Wg89dSaRiWiJZh8juKox5d)

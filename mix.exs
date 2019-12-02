@@ -4,10 +4,26 @@ defmodule Obrigado.MixProject do
   def project do
     [
       app: :obrigado,
-      version: "0.1.0",
+      description: description(),
+      package: package(),
+      version: "0.2.1",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
       deps: deps()
+    ]
+  end
+
+  defp description do
+    """
+    Star your deps repos on GitHub.
+    """
+  end
+
+  defp package do
+    [
+      maintainers:  ["Marat Galiev <kazanlug@gmail.com>"],
+      licenses:     ["MIT"],
+      links:        %{"GitHub" => "https://github.com/maratgaliev/obrigado"}
     ]
   end
 
