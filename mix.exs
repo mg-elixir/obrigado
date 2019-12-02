@@ -37,7 +37,8 @@ defmodule Obrigado.MixProject do
   defp deps do
     [
       {:exmoji, "~> 0.2.2"},
-      {:tentacat, "~> 1.0"}
+      {:tentacat, "~> 1.0"},
+      {:ex_doc, "~> 0.21.2", only: :dev, runtime: false},
     ]
   end
 end
