@@ -2,25 +2,36 @@ defmodule Obrigado do
   @doc """
   Star your Elixir deps on GitHub.
   """
-  def star do
-    Application.ensure_all_started(:hackney)
-    client = Tentacat.Client.new(%{access_token: System.get_env("GITHUB_TOKEN")})
-    Tentacat.Users.Starring.star client, "elixir-lang", "elixir"
-    IO.puts(Exmoji.unified_to_char("1F496"))
-    #IO.puts(Obrigado.MixProject.project()[:deps])
-    #IO.inspect(IEx.Info.info(Obrigado.MixProject.project()[:deps]))
-    Enum.each Obrigado.MixProject.project()[:deps], fn project -> 
-      item = project |> elem(0)
-      path = Mix.Project.deps_paths()[item]
-      read_metadata(path)
-      IO.puts(path)
-    end
+  def client do
+    Tentacat.Client.new(%{access_token: System.get_env("GITHUB_TOKEN")})
   end
 
-  defp read_metadata(package_path) do
-    file_name = "hex_metadata.config"
-    path = Path.join(package_path, file_name)
-    if File.exists?(path) do
-    end
+  def star do
+    deps = Obrigado.MixProject.project()[:deps]
+    parse_and_star_packages(deps)
+  end
+
+  def parse_url(url) do
+    String.split(url, "/", trim: true)
+  end
+
+  #TODO: get deps dir dynamically from configuration
+  def parse_and_star_packages(packages) do
+    Application.ensure_all_started(:hackney)
+    packages
+      |> Enum.each(fn name ->
+        case :file.consult('./deps/' ++ Atom.to_charlist(name |> elem(0)) ++ '/hex_metadata.config') do
+          {:ok, config} ->
+            links = Map.new config
+            data = links["links"] |> Enum.map(fn {k,v} -> {String.downcase(k),v} end) |> Map.new
+            github_url = data["github"] |> parse_url
+            username = Enum.at(github_url, 2)
+            reponame = Enum.at(github_url, 3)
+            Tentacat.Users.Starring.star client(), username, reponame
+            IO.puts("#{Exmoji.unified_to_char("1F496")} #{reponame}")
+          {:error, _} ->
+            [Atom.to_string(name), "Could not read repository metadata"]
+        end
+      end)
   end
 end
